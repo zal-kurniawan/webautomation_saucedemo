@@ -21,5 +21,5 @@ public class ProductsObjectRepository {
     public By buttonAddToCart = By.xpath(".//button");
 
     @FindBy(xpath = "//a[@class = 'shopping_cart_link']")
-    public WebElement buttonCart;
+    public WebElement cartButton;
 }

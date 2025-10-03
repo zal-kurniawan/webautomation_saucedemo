@@ -29,14 +29,14 @@ public class ProductPage {
         return product;
     }
 
-    public void addToCartProduct(String[] productsName) {
+    public void addToCartProduct(String[] productNames) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(productObject.productContainer));
-        for (String productName : productsName) {
+        for (String productName : productNames) {
             getProductByName(productName).findElement(productObject.buttonAddToCart).click();
         }
     }
 
     public void goToCartPage() {
-        productObject.buttonCart.click();
+        productObject.cartButton.click();
     }
 }

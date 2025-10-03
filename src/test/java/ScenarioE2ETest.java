@@ -1,6 +1,5 @@
 import java.time.Duration;
 import java.util.List;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,6 +9,12 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import com.example.page_factory.object_repository.CartObjectRepository;
+import com.example.page_factory.object_repository.CheckoutObjectRepository;
+import com.example.page_factory.object_repository.CompleteCheckoutObjectRepository;
+import com.example.page_factory.pages.CartPage;
+import com.example.page_factory.pages.CheckoutPage;
+import com.example.page_factory.pages.CompleteCheckoutPage;
 import com.example.page_factory.pages.InformationPage;
 import com.example.page_factory.pages.LoginPage;
 import com.example.page_factory.pages.ProductPage;
@@ -21,6 +26,12 @@ public class ScenarioE2ETest {
         private LoginPage loginPage;
         private ProductPage productPage;
         private InformationPage informationPage;
+        private CartObjectRepository cartObject;
+        private CartPage cartPage;
+        private CheckoutObjectRepository checkoutObject;
+        private CheckoutPage checkoutPage;
+        private CompleteCheckoutObjectRepository completeObject;
+        private CompleteCheckoutPage completePage;
 
         @BeforeClass
         public void setUp() {
@@ -40,6 +51,12 @@ public class ScenarioE2ETest {
                 loginPage = new LoginPage(driver);
                 productPage = new ProductPage(driver);
                 informationPage = new InformationPage(driver);
+                cartObject = new CartObjectRepository(driver);
+                cartPage = new CartPage(driver);
+                checkoutObject = new CheckoutObjectRepository(driver);
+                checkoutPage = new CheckoutPage(driver);
+                completeObject = new CompleteCheckoutObjectRepository(driver);
+                completePage = new CompleteCheckoutPage(driver);
         }
 
         @Test
@@ -49,20 +66,20 @@ public class ScenarioE2ETest {
                 Thread.sleep(2000);
 
                 // Add to card product
-                String[] productsName = { "Sauce Labs Backpack", "Sauce Labs Bolt T-Shirt", "Sauce Labs Onesie" };
-                productPage.addToCartProduct(productsName);
+                String[] productNames = { "Sauce Labs Backpack", "Sauce Labs Bolt T-Shirt", "Sauce Labs Onesie" };
+                productPage.addToCartProduct(productNames);
                 productPage.goToCartPage();
                 Thread.sleep(2000);
 
                 // Cart page
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'cart_list']")));
-                List<String> itemNames = driver.findElements(By.xpath("//div[@class = 'cart_item']")).stream()
-                                .map(name -> name.findElement(By.xpath(".//div[@class = 'inventory_item_name']"))
+                wait.until(ExpectedConditions.visibilityOfElementLocated(cartObject.cartContainer));
+                List<String> itemNamesCart = driver.findElements(cartObject.cartList).stream()
+                                .map(name -> name.findElement(cartObject.productName)
                                                 .getText())
                                 .toList();
-                Assert.assertEquals(itemNames.toArray(), productsName,
+                Assert.assertEquals(itemNamesCart.toArray(), productNames,
                                 "Daftar produk di keranjang tidak sesuai.");
-                driver.findElement(By.id("checkout")).click();
+                cartPage.goToCheckoutOverview();
                 Thread.sleep(2000);
 
                 // Fill information checkout
@@ -70,17 +87,16 @@ public class ScenarioE2ETest {
                 Thread.sleep(2000);
 
                 // Overview product
-
                 wait.until(ExpectedConditions
-                                .visibilityOfElementLocated(By.xpath("//div[@class = 'checkout_summary_container']")));
-                List<String> itemNamesOverview = driver.findElements(By.xpath("//div[@class = 'cart_item']")).stream()
-                                .map(name -> name.findElement(By.xpath(".//div[@class = 'inventory_item_name']"))
+                                .visibilityOfElementLocated(checkoutObject.checkoutContainer));
+                List<String> itemNamesCheckout = driver.findElements(checkoutObject.checkoutList).stream()
+                                .map(name -> name.findElement(checkoutObject.productName)
                                                 .getText())
                                 .toList();
-                Assert.assertEquals(itemNamesOverview.toArray(), productsName,
+                Assert.assertEquals(itemNamesCheckout.toArray(), productNames,
                                 "Daftar produk di keranjang tidak sesuai.");
-                List<String> itemPrices = driver.findElements(By.xpath("//div[@class = 'cart_item']")).stream()
-                                .map(name -> name.findElement(By.xpath(".//div[@class = 'inventory_item_price']"))
+                List<String> itemPrices = driver.findElements(checkoutObject.checkoutList).stream()
+                                .map(name -> name.findElement(checkoutObject.productPrice)
                                                 .getText())
                                 .toList();
                 float totalPrice = 0;
@@ -88,16 +104,18 @@ public class ScenarioE2ETest {
                         price = price.replaceAll("\\$", "");
                         totalPrice = totalPrice + Float.parseFloat(price);
                 }
-                Assert.assertEquals(driver.findElement(By.xpath("//div[@class = 'summary_subtotal_label']")).getText(),
+                Assert.assertEquals(checkoutObject.subtotalLabel.getText(),
                                 "Item total: $" + totalPrice, "Subtotal produk tidak sesuai.");
-                driver.findElement(By.id("finish")).click();
+                checkoutPage.finishCheckout();
                 Thread.sleep(2000);
 
                 // Verify checkout complete
                 wait.until(ExpectedConditions
-                                .visibilityOfElementLocated(By.xpath("//div[@class = 'checkout_complete_container']")));
-                driver.findElement(By.xpath("//h2[@class = 'complete-header']")).isDisplayed();
-                driver.findElement(By.xpath("//div[@class = 'complete-text']")).isDisplayed();
+                                .visibilityOfElementLocated(completeObject.checkoutCompleteContainer));
+                completeObject.completeHeader.isDisplayed();
+                completeObject.completeText.isDisplayed();
+                completePage.backHome();
+                Thread.sleep(2000);
         }
 
         @AfterClass
