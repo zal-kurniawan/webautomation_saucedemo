@@ -1,8 +1,6 @@
 package com.example.page_factory.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
 import com.example.page_factory.object_repository.CartObjectRepository;
 
 public class CartPage {
