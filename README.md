@@ -11,7 +11,7 @@ git clone https://github.com/zal-kurniawan/webautomation_saucedemo.git
 ### 2. Navigate to the Project Directory
 
 ```
-cd webautomation
+cd webautomation_saucedemo
 ```
 
 ### 3. Run Tests via Maven
