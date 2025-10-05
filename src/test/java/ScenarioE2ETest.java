@@ -1,5 +1,4 @@
 import java.time.Duration;
-import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -35,6 +34,7 @@ public class ScenarioE2ETest {
 
         @BeforeClass
         public void setUp() {
+                // Setup browser
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions options = new ChromeOptions();
                 options.addArguments("--guest");
@@ -73,11 +73,7 @@ public class ScenarioE2ETest {
 
                 // Cart page
                 wait.until(ExpectedConditions.visibilityOfElementLocated(cartObject.cartContainer));
-                List<String> itemNamesCart = driver.findElements(cartObject.cartList).stream()
-                                .map(name -> name.findElement(cartObject.productName)
-                                                .getText())
-                                .toList();
-                Assert.assertEquals(itemNamesCart.toArray(), productNames,
+                Assert.assertEquals(cartPage.getItemNames().toArray(), productNames,
                                 "Daftar produk di keranjang tidak sesuai.");
                 cartPage.goToCheckoutOverview();
                 Thread.sleep(2000);
@@ -89,18 +85,10 @@ public class ScenarioE2ETest {
                 // Overview product
                 wait.until(ExpectedConditions
                                 .visibilityOfElementLocated(checkoutObject.checkoutContainer));
-                List<String> itemNamesCheckout = driver.findElements(checkoutObject.checkoutList).stream()
-                                .map(name -> name.findElement(checkoutObject.productName)
-                                                .getText())
-                                .toList();
-                Assert.assertEquals(itemNamesCheckout.toArray(), productNames,
+                Assert.assertEquals(checkoutPage.getItemNames().toArray(), productNames,
                                 "Daftar produk di keranjang tidak sesuai.");
-                List<String> itemPrices = driver.findElements(checkoutObject.checkoutList).stream()
-                                .map(name -> name.findElement(checkoutObject.productPrice)
-                                                .getText())
-                                .toList();
                 float totalPrice = 0;
-                for (String price : itemPrices) {
+                for (String price : checkoutPage.getItemPrices()) {
                         price = price.replaceAll("\\$", "");
                         totalPrice = totalPrice + Float.parseFloat(price);
                 }
