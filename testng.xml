@@ -4,7 +4,7 @@
         <test name="Web Automation">
         <parameter name="program"  value="Web Automation"/>
             <classes>
-                <class name="ScenarioE2ETest"/>
+                <class name="runner.TestRunnerCheckout"/>
             </classes>
         </test>
     </suite>

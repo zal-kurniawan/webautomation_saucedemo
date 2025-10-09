@@ -23,4 +23,7 @@ public class LoginObjectRepository {
     @FindBy(id = "login-button")
     public WebElement loginButton;
 
+    @FindBy(xpath = "//div[@class = 'error-message-container error']")
+    public WebElement errorMessage;
+
 }

@@ -22,7 +22,7 @@ public class CartPage {
         return itemNamesCart;
     }
 
-    public void goToCheckoutOverview() {
+    public void goToInformationPage() {
         cartObject.checkoutButton.click();
     }
 }

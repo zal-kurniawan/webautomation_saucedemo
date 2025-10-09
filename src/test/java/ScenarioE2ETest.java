@@ -66,7 +66,8 @@ public class ScenarioE2ETest {
                 Thread.sleep(2000);
 
                 // Add to card product
-                String[] productNames = { "Sauce Labs Backpack", "Sauce Labs Bolt T-Shirt", "Sauce Labs Onesie" };
+                String[] productNames = { "Sauce Labs Backpack", "Sauce Labs Bolt T-Shirt",
+                                "Sauce Labs Onesie" };
                 productPage.addToCartProduct(productNames);
                 productPage.goToCartPage();
                 Thread.sleep(2000);
@@ -75,11 +76,12 @@ public class ScenarioE2ETest {
                 wait.until(ExpectedConditions.visibilityOfElementLocated(cartObject.cartContainer));
                 Assert.assertEquals(cartPage.getItemNames().toArray(), productNames,
                                 "Daftar produk di keranjang tidak sesuai.");
-                cartPage.goToCheckoutOverview();
+                cartPage.goToInformationPage();
                 Thread.sleep(2000);
 
                 // Fill information checkout
                 informationPage.fillInformationCheckout("Budi", "Sudarsono", "654921");
+                informationPage.goToOverviewPage();
                 Thread.sleep(2000);
 
                 // Overview product
