@@ -22,4 +22,8 @@ public class InformationPage extends AbstractComponents {
     public void goToOverviewPage() {
         informationObject.continueButton.click();
     }
+
+    public void verifyErrorMessageInformation() {
+        informationObject.errorMessage.isDisplayed();
+    }
 }

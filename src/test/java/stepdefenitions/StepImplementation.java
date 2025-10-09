@@ -4,10 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
 import com.example.page_factory.object_repository.CheckoutObjectRepository;
-import com.example.page_factory.object_repository.CompleteCheckoutObjectRepository;
-import com.example.page_factory.object_repository.LoginObjectRepository;
 import com.example.page_factory.pages.CartPage;
 import com.example.page_factory.pages.CheckoutPage;
+import com.example.page_factory.pages.CompleteCheckoutPage;
 import com.example.page_factory.pages.InformationPage;
 import com.example.page_factory.pages.LoginPage;
 import com.example.page_factory.pages.ProductPage;
@@ -107,9 +106,9 @@ public class StepImplementation {
 
     @Then("User verify the order is placed successfully")
     public void userVerifyTheOrderIsPlacedSuccessfully() {
-        CompleteCheckoutObjectRepository completeObject = new CompleteCheckoutObjectRepository(driver);
-        completeObject.completeHeader.isDisplayed();
-        completeObject.completeText.isDisplayed();
+        CompleteCheckoutPage completeCheckoutPage = new CompleteCheckoutPage(driver);
+        completeCheckoutPage.verifyCompleteCheckout();
+
     }
 
     @When("User login with invalid credentials")
@@ -118,9 +117,21 @@ public class StepImplementation {
         loginPage.doLogin("admin", "admin");
     }
 
-    @Then("User will see error message")
-    public void userWillSeeErrorMessage() {
-        LoginObjectRepository loginObject = new LoginObjectRepository(driver);
-        loginObject.errorMessage.isDisplayed();
+    @Then("User will see error message login")
+    public void userWillSeeErrorMessageLogin() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.verifyErrorLogin();
+    }
+
+    @When("User fill information with {string}, {string}, and {string}")
+    public void userFillInformationWith(String firstname, String lastname, String postalcode) {
+        InformationPage informationPage = new InformationPage(driver);
+        informationPage.fillInformationCheckout(firstname, lastname, postalcode);
+    }
+
+    @Then("User will see error messaage information")
+    public void userWillSeeErrorMessageInformation() {
+        InformationPage informationPage = new InformationPage(driver);
+        informationPage.verifyErrorMessageInformation();
     }
 }

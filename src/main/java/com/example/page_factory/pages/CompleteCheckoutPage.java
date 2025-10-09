@@ -10,6 +10,11 @@ public class CompleteCheckoutPage {
         completeObject = new CompleteCheckoutObjectRepository(driver);
     }
 
+    public void verifyCompleteCheckout() {
+        completeObject.completeHeader.isDisplayed();
+        completeObject.completeText.isDisplayed();
+    }
+
     public void backHome() {
         completeObject.backHomeButton.click();
     }

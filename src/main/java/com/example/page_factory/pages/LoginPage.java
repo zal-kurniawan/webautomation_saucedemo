@@ -18,4 +18,8 @@ public class LoginPage extends AbstractComponents {
         loginObject.password.sendKeys(password);
         loginObject.loginButton.click();
     }
+
+    public void verifyErrorLogin() {
+        loginObject.errorMessage.isDisplayed();
+    }
 }

@@ -25,4 +25,7 @@ public class InformationObjectRepository {
 
     @FindBy(id = "continue")
     public WebElement continueButton;
+
+    @FindBy(xpath = "//div[@class = 'error-message-container error']")
+    public WebElement errorMessage;
 }
